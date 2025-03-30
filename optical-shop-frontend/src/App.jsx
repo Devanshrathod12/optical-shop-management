@@ -10,6 +10,7 @@ import MonthlySales from "./components/MonthlySales/MonthlySales";
 import AddCustomer from "./components/Addcustomer/Addcustomer";
 import CustomerList from "./components/CustomerList/CustomerList";
 import Navbar from "./components/Navbar/Navbar";
+import InstallButton from "./components/install/InstallButton";
 import moment from "moment";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
     <Router>
       {/* Navbar को Router के अंदर लाएं */}
       <Navbar />
+      <InstallButton />
       <ToastContainer position="top-right" autoClose={3000} />
       
       <Routes>

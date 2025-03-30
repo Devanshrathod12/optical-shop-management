@@ -170,7 +170,7 @@ const MonthlySales = () => {
   
 
   return (
-    <div className="max-w-7xl mx-auto mt-10 p-8 bg-gradient-to-r from-gray-100 to-blue-50 shadow-xl rounded-2xl border border-gray-300">
+    <div className="max-w-7xl mx-auto mt-20 p-8 bg-gradient-to-r from-gray-100 to-blue-50 shadow-xl rounded-2xl border border-gray-300">
       <h2 className="text-4xl font-bold mb-8 text-center text-gray-800 drop-shadow-lg">📊 Monthly Sales Data</h2>
 
       <div className="flex justify-end gap-4 mb-8">

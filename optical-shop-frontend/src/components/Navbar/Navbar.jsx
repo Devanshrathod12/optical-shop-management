@@ -16,8 +16,10 @@ import { BsSunglasses } from "react-icons/bs";
 const Navbar = () => {
   return (
     <div>
+      
       {/* Desktop Navbar */}
       <nav className="fixed top-0 w-full flex justify-between items-center px-6 md:px-12 py-4 bg-white bg-opacity-90 backdrop-blur-md shadow-lg z-50 border-b border-gray-300">
+        
         <div className="flex items-center gap-4">
           <img src={logo} alt="Logo" className="h-12 w-auto drop-shadow-lg" />
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800 tracking-wide"></h1>

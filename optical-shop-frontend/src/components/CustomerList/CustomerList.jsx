@@ -82,7 +82,7 @@ const CustomerList = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center mt-20 mb-16 justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-7xl bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center">
         <h2 className="text-4xl font-bold mb-4 text-gray-800 text-center">Customer List with Monthly Sales</h2>
         <p className="text-lg text-gray-700 mb-6">

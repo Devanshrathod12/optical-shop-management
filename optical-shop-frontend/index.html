@@ -5,10 +5,14 @@
 
     <!-- manifest file for PWA -->
     <link rel="manifest" href="/manifest.json">
-    
+    <script>
+      if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("service-worker.js");
+      }
+  </script>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>Shree Vinayak Optical</title>
   </head>
   <body>
     <div id="root"></div>

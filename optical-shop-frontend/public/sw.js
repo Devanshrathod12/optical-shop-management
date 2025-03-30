@@ -1,5 +1,4 @@
-const CACHE_NAME = "hair-salon-cache-v2"; // Cache version
-
+const CACHE_NAME = "svo-cache-v1";
 const ASSETS = [
   "/",
   "/index.html",
@@ -7,19 +6,14 @@ const ASSETS = [
   "/icons/logo-512x512.png",
 ];
 
-// Install Service Worker
 self.addEventListener("install", (event) => {
-  console.log("Service Worker Installed");
-
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("Caching assets");
       return cache.addAll(ASSETS);
     })
   );
 });
 
-// Activate Service Worker
 self.addEventListener("activate", (event) => {
   console.log("Service Worker Activated");
 
@@ -37,7 +31,6 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch event - Serve from Cache First, then Network
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
@@ -46,7 +39,6 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Push Notification (Optional, Future Feature)
 self.addEventListener("push", (event) => {
   console.log("Push Event Received:", event);
   event.waitUntil(
@@ -57,3 +49,6 @@ self.addEventListener("push", (event) => {
     })
   );
 });
+
+
+

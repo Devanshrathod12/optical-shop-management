@@ -1,21 +1,20 @@
-
 {
-    "id": "/",
-    "short_name": "Hair Salon",
-    "name": "Hair Salon",
-    "icons": [
-      {
-        "src": "/icons/logo-192x192.png",
-        "type": "image/png",
-        "sizes": "192x192"
-      },
-      {
-        "src": "/icons/logo-512x512.png",
-        "type": "image/png",
-        "sizes": "512x512"
-      }
-    ],
-    "screenshots": [
+  "id": "/",
+  "name": "Shree Vinayak Optical",
+  "short_name": "SVO",
+  "icons": [
+    {
+      "src": "/icons/logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
       {
         "src": "/screenshots/home-wide.png",
         "type": "image/png",
@@ -23,7 +22,7 @@
         "form_factor": "wide"
       },
       {
-        "src": "/screenshots/home-mobile.png",
+        "src": "/screenshots/home-mobile.jpg",
         "type": "image/png",
         "sizes": "720x1280"
       }
@@ -31,6 +30,7 @@
     "start_url": "/",
     "scope": "/",
     "background_color": "#ffffff",
-    "theme_color": "#009688",
+    "theme_color": "#000000",
     "display": "standalone"
 }
+
