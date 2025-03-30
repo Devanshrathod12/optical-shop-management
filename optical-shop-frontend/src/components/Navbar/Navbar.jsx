@@ -1,7 +1,17 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo1.png";
-import { FaChartLine, FaUsers, FaUserPlus, FaList, FaHome } from "react-icons/fa";
+import {
+  FaChartLine,
+  FaUsers,
+  FaUserPlus,
+  FaList,
+  FaHome,
+  FaBars,
+} from "react-icons/fa";
+import { FaCubesStacked } from "react-icons/fa6";
+import { SlCalender } from "react-icons/sl";
+import { BsSunglasses } from "react-icons/bs";
 
 const Navbar = () => {
   return (
@@ -10,11 +20,47 @@ const Navbar = () => {
       <nav className="fixed top-0 w-full flex justify-between items-center px-6 md:px-12 py-4 bg-white bg-opacity-90 backdrop-blur-md shadow-lg z-50 border-b border-gray-300">
         <div className="flex items-center gap-4">
           <img src={logo} alt="Logo" className="h-12 w-auto drop-shadow-lg" />
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 tracking-wide">
-            Shree Vinayak Optical
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 tracking-wide"></h1>
         </div>
+
+        {/* Mobile menu button (only visible on small screens) */}
+        <div className="md:hidden flex  items-center gap-5">
+        <NavLink
+            className="text-gray-800 hover:text-blue-600   focus:outline-none"
+            to="/Addcustomer"
+          >
+            <FaUserPlus className="text-xl ml-7" />
+            <span className="text-xs ">Add Customer</span>
+          </NavLink>
+
+          <NavLink
+            className="text-gray-800 hover:text-blue-600   focus:outline-none"
+            to="/MonthlySales"
+          >
+            <SlCalender className="text-xl ml-5" />
+            <span className="text-xs ">MonthlySales</span>
+          </NavLink>
+          
+          <NavLink
+            className="text-gray-800 hover:text-blue-600   focus:outline-none"
+            to="/stock"
+          >
+            <FaCubesStacked className="text-xl ml-1" />
+            <span className="text-xs ">stock</span>
+          </NavLink>
+        </div>
+
         <div className="hidden md:flex gap-6">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
+                isActive ? "text-blue-600" : "hover:text-blue-600"
+              }`
+            }
+          >
+            Home
+          </NavLink>
           <NavLink
             to="/daily-sales"
             className={({ isActive }) =>
@@ -110,7 +156,7 @@ const Navbar = () => {
             }`
           }
         >
-          <FaUserPlus className="text-xl" />
+          <BsSunglasses className="text-xl" />
           <span className="text-xs">Wholesaler</span>
         </NavLink>
         <NavLink

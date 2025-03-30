@@ -29,8 +29,7 @@ const WholesalerList = () => {
 
   {/* Buttons - Mobile pe Stack, Desktop pe Inline */}
   <div className="flex flex-col sm:flex-row sm:justify-center gap-3 mb-6">
-    <button className="w-full sm:w-auto px-6 py-3 bg-blue-700 text-white rounded-xl hover:bg-blue-500 shadow-xl transition duration-300" onClick={() => navigate("/AddWholesaler")}>➕ Add Wholesaler</button>
-    <button className="w-full sm:w-auto px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 shadow-xl transition duration-300" onClick={() => navigate("/")}>🏠 Dashboard</button>
+
     <button className="w-full sm:w-auto px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 shadow-xl transition duration-300" onClick={() => navigate("/MonthlySales")}>📊 Monthly Sales</button>
   </div>
 

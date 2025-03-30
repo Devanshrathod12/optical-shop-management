@@ -175,22 +175,7 @@ const MonthlySales = () => {
 
       <div className="flex justify-end gap-4 mb-8">
       <div className="flex justify-end gap-4 mb-8">
-  <button
-    className="w-full md:w-auto px-6 py-3 bg-white text-gray-800 rounded-lg shadow-md transition-all duration-300 
-    hover:shadow-lg hover:-translate-y-1 border border-gray-300"
-    onClick={() => navigate("/")}
-  >
-    Dashboard
-  </button>
-
-  <button
-    className="w-full md:w-auto px-6 py-3 bg-white text-gray-800 rounded-lg shadow-md transition-all duration-300 
-    hover:shadow-lg hover:-translate-y-1 border border-gray-300"
-    onClick={() => navigate("/daily-sales")}
-  >
-    Daily Sales
-  </button>
-
+ 
   <button
     onClick={generatePDF}
     className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-900 
