@@ -1,0 +1,36 @@
+
+{
+    "id": "/",
+    "short_name": "Hair Salon",
+    "name": "Hair Salon",
+    "icons": [
+      {
+        "src": "/icons/logo-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/icons/logo-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "/screenshots/home-wide.png",
+        "type": "image/png",
+        "sizes": "1280x720",
+        "form_factor": "wide"
+      },
+      {
+        "src": "/screenshots/home-mobile.png",
+        "type": "image/png",
+        "sizes": "720x1280"
+      }
+    ],
+    "start_url": "/",
+    "scope": "/",
+    "background_color": "#ffffff",
+    "theme_color": "#009688",
+    "display": "standalone"
+}

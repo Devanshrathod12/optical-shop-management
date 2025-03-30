@@ -9,12 +9,16 @@ import WholesalerList from "./components/WholesalerList/WholesalerList";
 import MonthlySales from "./components/MonthlySales/MonthlySales";
 import AddCustomer from "./components/Addcustomer/Addcustomer";
 import CustomerList from "./components/CustomerList/CustomerList";
-import moment from "moment"
+import Navbar from "./components/Navbar/Navbar";
+import moment from "moment";
 
 function App() {
   return (
     <Router>
+      {/* Navbar को Router के अंदर लाएं */}
+      <Navbar />
       <ToastContainer position="top-right" autoClose={3000} />
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/daily-sales" element={<DailySales />} />

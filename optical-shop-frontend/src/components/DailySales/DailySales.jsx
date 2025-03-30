@@ -3,7 +3,6 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import img from "../../assets/dailysalesimg.png"
 const DailySales = () => {
     const navigate = useNavigate();
   const [sale, setSale] = useState({
@@ -397,18 +396,6 @@ const DailySales = () => {
             className="px-6 py-3 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-300"
           >
              Add Sale
-          </button>
-          <button
-            onClick={() => navigate("/")}
-            className="px-6 py-3 bg-gray-400 text-gray-700 rounded-md hover:bg-gray-100 shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
-          >
-             Dashboard
-          </button>
-          <button
-            onClick={() => navigate("/MonthlySales")}
-            className="px-6 py-3 bg-green-400 text-white rounded-md hover:bg-green-500 shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-300"
-          >
-             Month Sales
           </button>
         </div>
       </form>
