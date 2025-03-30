@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const authRoutes = require("./routes/authRoutes");
 const salesroutes = require("./routes/sales")
 const Wholesaler = require("./routes/wholesalerRoutes")
 const customer = require("./routes/customer")
@@ -18,7 +17,6 @@ mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected Successfully!"))
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
-app.use("/api/auth", authRoutes);
 app.use("/api/sales", salesroutes)
 app.use("/api/Who",Wholesaler)
 app.use("/api/custo",customer)
