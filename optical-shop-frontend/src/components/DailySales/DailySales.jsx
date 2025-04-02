@@ -3,6 +3,7 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+
 const DailySales = () => {
   const navigate = useNavigate();
   const [sale, setSale] = useState({
@@ -22,6 +23,7 @@ const DailySales = () => {
     LensPurchasingPrice: "",
     Fiting: "",
     boxcloth: "",
+    uniqueID: "" // Added uniqueID field
   });
 
   const handleChange = (e) => {
@@ -31,10 +33,25 @@ const DailySales = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // First add the sale
       await Axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/sales/add`,
         sale
       );
+      
+      // If uniqueID is provided, update the frame quantity
+      if (sale.uniqueID) {
+        try {
+          await Axios.patch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/Who/update-quantity/${sale.uniqueID}`
+          );
+          toast.success("Frame quantity updated successfully!");
+        } catch (error) {
+          toast.warning("Sale added but frame quantity update failed");
+          console.error("Frame update error:", error);
+        }
+      }
+      
       toast.success("Sale added successfully!");
       setSale({
         billNo: "",
@@ -53,6 +70,7 @@ const DailySales = () => {
         LensPurchasingPrice: "",
         Fiting: "",
         boxcloth: "",
+        uniqueID: ""
       });
     } catch (error) {
       toast.error("Error adding sale");
@@ -231,6 +249,25 @@ const DailySales = () => {
               onChange={handleChange}
               value={sale.frameName}
               required
+              className="w-full px-4 py-2 border border-gray-200 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-gray-50"
+            />
+          </div>
+
+          {/* Unique ID */}
+          <div>
+            <label
+              htmlFor="uniqueID"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Frame Unique ID (optional):
+            </label>
+            <input
+              type="text"
+              id="uniqueID"
+              name="uniqueID"
+              placeholder="Enter Frame Unique ID to update quantity"
+              onChange={handleChange}
+              value={sale.uniqueID}
               className="w-full px-4 py-2 border border-gray-200 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-gray-50"
             />
           </div>

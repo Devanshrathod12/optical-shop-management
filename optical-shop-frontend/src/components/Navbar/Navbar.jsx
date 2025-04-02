@@ -27,13 +27,7 @@ const Navbar = () => {
 
         {/* Mobile menu button (only visible on small screens) */}
         <div className="md:hidden flex  items-center gap-5">
-        <NavLink
-            className="text-gray-800 hover:text-blue-600   focus:outline-none"
-            to="/Addcustomer"
-          >
-            <FaUserPlus className="text-xl ml-7" />
-            <span className="text-xs ">Add Customer</span>
-          </NavLink>
+        
 
           <NavLink
             className="text-gray-800 hover:text-blue-600   focus:outline-none"
@@ -124,7 +118,7 @@ const Navbar = () => {
             Wholesaler
           </NavLink>
           
-          <NavLink
+          {/* <NavLink
             to="/WholesalerList"
             className={({ isActive }) =>
               `text-gray-800 px-5 py-2 text-lg font-medium transition ${
@@ -133,7 +127,7 @@ const Navbar = () => {
             }
           >
             Wholesaler List
-          </NavLink>
+          </NavLink> */}
          
           
          
@@ -187,16 +181,17 @@ const Navbar = () => {
           <span className="text-xs">Customers</span>
         </NavLink>
         <NavLink
-          to="/WholesalerList"
+          to="/Addcustomer"
           className={({ isActive }) =>
             `flex flex-col items-center text-gray-600 ${
-              isActive ? "text-purple-600" : "hover:text-purple-600"
+              isActive ? "text-red-600" : "hover:text-red-600"
             }`
           }
         >
-          <FaList className="text-xl" />
-          <span className="text-xs">List</span>
+          <FaUserPlus className="text-xl" />
+          <span className="text-xs">Add Customer</span>
         </NavLink>
+        
       </div>
     </div>
   );

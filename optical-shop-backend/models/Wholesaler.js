@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const WholesalerSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  date: { type: Date, default: Date.now },
   framePrice: { type: Number, required: true },
   frameType: { type: String, required: true },
   frameBrand: { type: String, required: true },
@@ -11,24 +10,37 @@ const WholesalerSchema = new mongoose.Schema({
   uniqueID: { type: String, unique: true }
 });
 
-// Unique ID Generator Middleware (FINAL FIX)
+// Unique ID Generator Middleware - Run Only on New Document Creation
 WholesalerSchema.pre("save", function (next) {
-  console.log("Generating uniqueID..."); // Debug log
+  console.log("Checking if uniqueID should be generated...");
+
+  // सिर्फ़ नए डॉक्यूमेंट के लिए uniqueID बनाओ, अपडेट या डिलीट पर नहीं
+  if (!this.isNew) {
+    console.log("Existing document, skipping uniqueID generation.");
+    return next();
+  }
+
+  console.log("Generating uniqueID...");
 
   // Ensure all required fields exist
   if (!this.name || !this.framePrice || !this.frameType || !this.quantity || !this.frameBrand || !this.billNumber) {
     throw new Error("Missing fields for ID generation!");
   }
 
-  const nameInitial = this.name.charAt(0).toUpperCase(); // D
-  const priceDigits = this.framePrice.toString().slice(0, 2); // 24
-  const typeInitial = this.frameType.charAt(0).toUpperCase(); // S
-  const quantityDigit = this.quantity.toString(); // 5
-  const brandInitial = this.frameBrand.split(" ")[0].charAt(0).toUpperCase(); // W
-  const billDigits = this.billNumber.toString().slice(-2); // 25
+  // Extracting necessary details
+  const nameInitial = this.name.charAt(0).toUpperCase(); // First letter of Name
+  const priceDigits = this.framePrice.toString().slice(0, 2); // First 2 digits of Price
+  const typeInitial = this.frameType.charAt(0).toUpperCase(); // First letter of Frame Type
+  const quantityDigit = this.quantity.toString().slice(-1); // Last digit of Quantity
+  const billFirstDigit = this.billNumber.toString().charAt(0); // First digit of Bill Number
 
-  this.uniqueID = `${nameInitial}${priceDigits}${typeInitial}${quantityDigit}${brandInitial}${billDigits}`;
-  console.log("Final uniqueID:", this.uniqueID); // Debug log
+  // Generate a 2-character Random String
+  const randomPart = Math.random().toString(36).substring(2, 4).toUpperCase();
+
+  // Final Unique ID
+  this.uniqueID = `${nameInitial}${priceDigits}${typeInitial}${quantityDigit}${billFirstDigit}${randomPart}`;
+
+  console.log("Final uniqueID:", this.uniqueID);
   next();
 });
 

@@ -5,7 +5,6 @@ import DailySales from "./components/DailySales/DailySales";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddWholesaler from "./components/AddWholesaler/AddWholesaler";
-import WholesalerList from "./components/WholesalerList/WholesalerList";
 import MonthlySales from "./components/MonthlySales/MonthlySales";
 import AddCustomer from "./components/Addcustomer/Addcustomer";
 import CustomerList from "./components/CustomerList/CustomerList";
@@ -26,7 +25,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/daily-sales" element={<DailySales />} />
         <Route path="/AddWholesaler" element={<AddWholesaler />} />
-        <Route path="/WholesalerList" element={<WholesalerList />} />
         <Route path="/MonthlySales" element={<MonthlySales />} />
         <Route path="/Addcustomer" element={<AddCustomer />} />
         <Route path="/CustomerList" element={<CustomerList />} />
