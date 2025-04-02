@@ -11,6 +11,7 @@ import AddCustomer from "./components/Addcustomer/Addcustomer";
 import CustomerList from "./components/CustomerList/CustomerList";
 import Navbar from "./components/Navbar/Navbar";
 import InstallButton from "./components/install/InstallButton";
+import Stock from "./components/stock/Stock";
 import moment from "moment";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/MonthlySales" element={<MonthlySales />} />
         <Route path="/Addcustomer" element={<AddCustomer />} />
         <Route path="/CustomerList" element={<CustomerList />} />
+        <Route path="/stock" element={<Stock />} />
       </Routes>
     </Router>
   );

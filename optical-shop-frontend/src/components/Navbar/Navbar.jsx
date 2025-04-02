@@ -45,7 +45,7 @@ const Navbar = () => {
           
           <NavLink
             className="text-gray-800 hover:text-blue-600   focus:outline-none"
-            to="/stock"
+            to="/Stock"
           >
             <FaCubesStacked className="text-xl ml-1" />
             <span className="text-xs ">stock</span>
@@ -74,16 +74,6 @@ const Navbar = () => {
             Daily Sales
           </NavLink>
           <NavLink
-            to="/AddWholesaler"
-            className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-green-600" : "hover:text-green-600"
-              }`
-            }
-          >
-            Wholesaler
-          </NavLink>
-          <NavLink
             to="/MonthlySales"
             className={({ isActive }) =>
               `text-gray-800 px-5 py-2 text-lg font-medium transition ${
@@ -94,14 +84,24 @@ const Navbar = () => {
             Monthly Sales
           </NavLink>
           <NavLink
-            to="/WholesalerList"
+            to="/Stock"
             className={({ isActive }) =>
               `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-purple-600" : "hover:text-purple-600"
+                isActive ? "text-yellow-600" : "hover:text-yellow-600"
               }`
             }
           >
-            Wholesaler List
+            Stock
+          </NavLink>
+          <NavLink
+            to="/CustomerList"
+            className={({ isActive }) =>
+              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
+                isActive ? "text-yellow-600" : "hover:text-yellow-600"
+              }`
+            }
+          >
+            Customers
           </NavLink>
           <NavLink
             to="/Addcustomer"
@@ -114,15 +114,29 @@ const Navbar = () => {
             Add Customer
           </NavLink>
           <NavLink
-            to="/CustomerList"
+            to="/AddWholesaler"
             className={({ isActive }) =>
               `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-yellow-600" : "hover:text-yellow-600"
+                isActive ? "text-green-600" : "hover:text-green-600"
               }`
             }
           >
-            Customers
+            Wholesaler
           </NavLink>
+          
+          <NavLink
+            to="/WholesalerList"
+            className={({ isActive }) =>
+              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
+                isActive ? "text-purple-600" : "hover:text-purple-600"
+              }`
+            }
+          >
+            Wholesaler List
+          </NavLink>
+         
+          
+         
         </div>
       </nav>
 
@@ -148,7 +162,7 @@ const Navbar = () => {
           }
         >
           <FaChartLine className="text-xl" />
-          <span className="text-xs">Sales</span>
+          <span className="text-xs">Daily Sales</span>
         </NavLink>
         <NavLink
           to="/AddWholesaler"

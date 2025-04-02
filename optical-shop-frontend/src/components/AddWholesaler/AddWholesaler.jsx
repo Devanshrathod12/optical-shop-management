@@ -46,7 +46,7 @@ const AddWholesaler = () => {
     </div>
   
     <div className="max-w-lg w-full p-6 bg-white shadow-lg rounded-lg relative z-10">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Add Wholesaler</h2>
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Add Stock</h2>
   
       {/* Navigation Buttons */}
       <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-4">
@@ -81,7 +81,7 @@ const AddWholesaler = () => {
         
         <button type="submit" 
           className="w-full p-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition">
-          Add Wholesaler
+          Add Stock
         </button>
       </form>
     </div>
