@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { useStore } from "../../components/StoreContext/StoreContext";
 
 const Stock = () => {
   const [stock, setStock] = useState([]);
-  const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/who/all`;
+  const { getAllStock, loading } = useStore();
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setStock(data.wholesalers);
-        } else {
-          console.error("Error fetching stock data:", data.message);
-        }
-      })
-      .catch((err) => console.error("Error fetching stock:", err));
+    fetchStockData();
   }, []);
+
+  const fetchStockData = async () => {
+    try {
+      const response = await getAllStock();
+      if (response.success) {
+        setStock(response.wholesalers);
+      } else {
+        console.error("Error fetching stock data:", response.message);
+      }
+    } catch (err) {
+      console.error("Error fetching stock:", err);
+    }
+  };
 
   // Group stock by first letter of uniqueID
   const groupedStock = stock.reduce((acc, item) => {

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Axios from "axios";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "../../components/StoreContext/StoreContext";
 
 const DailySales = () => {
   const navigate = useNavigate();
+  const { addSale, loading } = useStore();
+  
   const [sale, setSale] = useState({
     billNo: "",
     date: "",
@@ -23,7 +23,7 @@ const DailySales = () => {
     LensPurchasingPrice: "",
     Fiting: "",
     boxcloth: "",
-    uniqueID: "" // Added uniqueID field
+    uniqueID: ""
   });
 
   const handleChange = (e) => {
@@ -33,26 +33,8 @@ const DailySales = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // First add the sale
-      await Axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/sales/add`,
-        sale
-      );
-      
-      // If uniqueID is provided, update the frame quantity
-      if (sale.uniqueID) {
-        try {
-          await Axios.patch(
-            `${import.meta.env.VITE_BACKEND_URL}/api/Who/update-quantity/${sale.uniqueID}`
-          );
-          toast.success("Frame quantity updated successfully!");
-        } catch (error) {
-          toast.warning("Sale added but frame quantity update failed");
-          console.error("Frame update error:", error);
-        }
-      }
-      
-      toast.success("Sale added successfully!");
+      await addSale(sale);
+      // Reset form after successful submission
       setSale({
         billNo: "",
         date: "",
@@ -73,33 +55,22 @@ const DailySales = () => {
         uniqueID: ""
       });
     } catch (error) {
-      toast.error("Error adding sale");
-      console.error("Error:", error);
+      
     }
   };
 
   return (
-    <div
-      className="min-h-screen mt-16 mb-5 bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "url('/path/to/your/background-image.jpg')" }}
-    >
-      <div className="absolute "></div>{" "}
-      {/* Background Overlay */}
+    <div className="min-h-screen mt-16 mb-5 bg-cover bg-center flex items-center justify-center">
+      <div className="absolute"></div>
       <div className="relative z-10 max-w-3xl w-full p-8 bg-white bg-opacity-90 rounded-lg shadow-xl">
         <h2 className="text-3xl font-semibold mb-6 text-center text-indigo-700">
           Daily Sales Entry
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Bill No */}
           <div>
-            <label
-              htmlFor="billNo"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="billNo" className="block text-sm font-medium text-gray-700 mb-1">
               Bill No:
             </label>
             <input
@@ -116,10 +87,7 @@ const DailySales = () => {
 
           {/* Date */}
           <div>
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
               Date:
             </label>
             <input
@@ -135,10 +103,7 @@ const DailySales = () => {
 
           {/* Customer Name */}
           <div>
-            <label
-              htmlFor="customerName"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="customerName" className="block text-sm font-medium text-gray-700 mb-1">
               Customer Name:
             </label>
             <input
@@ -155,10 +120,7 @@ const DailySales = () => {
 
           {/* Age */}
           <div>
-            <label
-              htmlFor="age"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
               Age:
             </label>
             <input
@@ -175,10 +137,7 @@ const DailySales = () => {
 
           {/* Address */}
           <div>
-            <label
-              htmlFor="address"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
               Address:
             </label>
             <input
@@ -195,10 +154,7 @@ const DailySales = () => {
 
           {/* Contact No */}
           <div>
-            <label
-              htmlFor="contactNo"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="contactNo" className="block text-sm font-medium text-gray-700 mb-1">
               Contact No:
             </label>
             <input
@@ -215,10 +171,7 @@ const DailySales = () => {
 
           {/* Lens Type */}
           <div>
-            <label
-              htmlFor="lensType"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="lensType" className="block text-sm font-medium text-gray-700 mb-1">
               Lens Type:
             </label>
             <input
@@ -235,10 +188,7 @@ const DailySales = () => {
 
           {/* Frame Name */}
           <div>
-            <label
-              htmlFor="frameName"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="frameName" className="block text-sm font-medium text-gray-700 mb-1">
               Frame Name:
             </label>
             <input
@@ -255,10 +205,7 @@ const DailySales = () => {
 
           {/* Unique ID */}
           <div>
-            <label
-              htmlFor="uniqueID"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="uniqueID" className="block text-sm font-medium text-gray-700 mb-1">
               Frame Unique ID (optional):
             </label>
             <input
@@ -274,10 +221,7 @@ const DailySales = () => {
 
           {/* Glasses */}
           <div>
-            <label
-              htmlFor="glasses"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="glasses" className="block text-sm font-medium text-gray-700 mb-1">
               Glasses:
             </label>
             <input
@@ -294,10 +238,7 @@ const DailySales = () => {
 
           {/* Total */}
           <div>
-            <label
-              htmlFor="total"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="total" className="block text-sm font-medium text-gray-700 mb-1">
               Total:
             </label>
             <input
@@ -314,10 +255,7 @@ const DailySales = () => {
 
           {/* Advance */}
           <div>
-            <label
-              htmlFor="advance"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="advance" className="block text-sm font-medium text-gray-700 mb-1">
               Advance:
             </label>
             <input
@@ -334,10 +272,7 @@ const DailySales = () => {
 
           {/* Balance */}
           <div>
-            <label
-              htmlFor="balance"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="balance" className="block text-sm font-medium text-gray-700 mb-1">
               Balance:
             </label>
             <input
@@ -354,10 +289,7 @@ const DailySales = () => {
 
           {/* Frame Purchasing Price */}
           <div>
-            <label
-              htmlFor="framePurchasingPrice"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="framePurchasingPrice" className="block text-sm font-medium text-gray-700 mb-1">
               Frame Purchasing Price:
             </label>
             <input
@@ -374,10 +306,7 @@ const DailySales = () => {
 
           {/* Lens Purchasing Price */}
           <div>
-            <label
-              htmlFor="LensPurchasingPrice"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="LensPurchasingPrice" className="block text-sm font-medium text-gray-700 mb-1">
               Lens Purchasing Price:
             </label>
             <input
@@ -394,10 +323,7 @@ const DailySales = () => {
 
           {/* Fitting */}
           <div>
-            <label
-              htmlFor="Fiting"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="Fiting" className="block text-sm font-medium text-gray-700 mb-1">
               Fitting:
             </label>
             <input
@@ -414,10 +340,7 @@ const DailySales = () => {
 
           {/* Box & Cloth */}
           <div>
-            <label
-              htmlFor="boxcloth"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="boxcloth" className="block text-sm font-medium text-gray-700 mb-1">
               Box & Cloth:
             </label>
             <input
@@ -432,13 +355,16 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Buttons */}
+          {/* Submit Button */}
           <div className="col-span-1 md:col-span-2 flex justify-center gap-4 mt-4">
             <button
               type="submit"
-              className="px-32 mb-10 py-3 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+              disabled={loading}
+              className={`px-32 mb-10 py-3 text-white rounded-md shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 ${
+                loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-500 hover:bg-indigo-600'
+              }`}
             >
-              Add Sale
+              {loading ? 'Processing...' : 'Add Sale'}
             </button>
           </div>
         </form>
