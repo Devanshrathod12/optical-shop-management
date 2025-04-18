@@ -2,7 +2,7 @@ const Wholesaler = require("../models/Wholesaler");
 
 exports.addWholesaler = async (req, res) => {
   try {
-    console.log("Request body:", req.body); // Debug log
+    console.log("Request body:", req.body); // Debug ke liye
     const wholesaler = new Wholesaler(req.body);
     await wholesaler.save();
     res.status(201).json({ success: true, wholesaler });

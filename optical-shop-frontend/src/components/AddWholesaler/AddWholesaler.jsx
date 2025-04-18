@@ -19,7 +19,7 @@ const AddWholesaler = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("API URL:", import.meta.env.VITE_BACKEND_URL + "/api/Who/add"); // Debugging
+      console.log("API URL:", import.meta.env.VITE_BACKEND_URL + "/api/Who/add"); 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/Who/add`,
         wholesaler,

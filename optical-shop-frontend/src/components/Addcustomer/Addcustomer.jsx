@@ -15,13 +15,16 @@ const AddCustomer = () => {
     setCustomer({ ...customer, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       console.log("Customer Data:", customer);
-      await Axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/custo/add`, customer);
+      await Axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/custo/add`,
+        customer
+      );
       toast.success("Customer Data Added");
-      setCustomer({ name: "", contactNo: "", address: "" }); // ✅ Fix
+      setCustomer({ name: "", contactNo: "", address: "" });
     } catch (error) {
       toast.error("Error adding Customer Data");
       console.error("Error adding customer:", error);
@@ -31,14 +34,16 @@ const AddCustomer = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Add Customer Data</h2>
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-4">
-       
-      </div>
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+          Add Customer Data
+        </h2>
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-4"></div>
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name Input */}
           <div>
-            <label className="block text-gray-700 font-medium">Customer Name</label>
+            <label className="block text-gray-700 font-medium">
+              Customer Name
+            </label>
             <input
               type="text"
               name="name"
@@ -52,7 +57,9 @@ const AddCustomer = () => {
 
           {/* Contact Number Input */}
           <div>
-            <label className="block text-gray-700 font-medium">Contact Number</label>
+            <label className="block text-gray-700 font-medium">
+              Contact Number
+            </label>
             <input
               type="tel"
               name="contactNo"
@@ -68,15 +75,14 @@ const AddCustomer = () => {
           <div>
             <label className="block text-gray-700 font-medium">Address</label>
             <input
-  type="text"
-  name="address"
-  placeholder="Enter address"
-  value={customer.address}
-  onChange={handleChange}
-  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-  required
-/>
-
+              type="text"
+              name="address"
+              placeholder="Enter address"
+              value={customer.address}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
           </div>
 
           {/* Submit Button */}

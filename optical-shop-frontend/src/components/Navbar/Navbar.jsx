@@ -5,132 +5,166 @@ import {
   FaChartLine,
   FaUsers,
   FaUserPlus,
-  FaList,
   FaHome,
-  FaBars,
+  FaChevronDown,
 } from "react-icons/fa";
 import { FaCubesStacked } from "react-icons/fa6";
 import { SlCalender } from "react-icons/sl";
 import { BsSunglasses } from "react-icons/bs";
+import { HiOutlineNewspaper } from "react-icons/hi2";
 
 const Navbar = () => {
   return (
     <div>
-      
       {/* Desktop Navbar */}
-      <nav className="fixed top-0 w-full flex justify-between items-center px-6 md:px-12 py-4 bg-white bg-opacity-90 backdrop-blur-md shadow-lg z-50 border-b border-gray-300">
-        
-        <div className="flex items-center gap-4">
-          <img src={logo} alt="Logo" className="h-12 w-auto drop-shadow-lg" />
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 tracking-wide"></h1>
+      <nav className="fixed top-0 w-full flex justify-between items-center px-6 lg:px-12 py-3 bg-white bg-opacity-90 backdrop-blur-md shadow-lg z-50 border-b border-gray-200">
+        <div className="flex items-center gap-3">
+          <img src={logo} alt="Logo" className="h-10 w-auto drop-shadow-lg" />
+          <h1 className="text-xl font-bold text-gray-800">Shree Vinayak Optical</h1>
         </div>
 
-        {/* Mobile menu button (only visible on small screens) */}
-        <div className="md:hidden flex  items-center gap-5">
-        
-
+        {/* Mobile menu icons (only visible on small screens) */}
+        <div className="md:hidden flex items-center gap-5">
           <NavLink
-            className="text-gray-800 hover:text-blue-600   focus:outline-none"
+            className="flex flex-col items-center text-gray-800 hover:text-blue-600"
             to="/MonthlySales"
           >
-            <SlCalender className="text-xl ml-5" />
-            <span className="text-xs ">MonthlySales</span>
+            <SlCalender className="text-xl" />
+            <span className="text-xs">Monthly</span>
           </NavLink>
           
           <NavLink
-            className="text-gray-800 hover:text-blue-600   focus:outline-none"
+            className="flex flex-col items-center text-gray-800 hover:text-blue-600"
             to="/Stock"
           >
-            <FaCubesStacked className="text-xl ml-1" />
-            <span className="text-xs ">stock</span>
+            <FaCubesStacked className="text-xl" />
+            <span className="text-xs">Stock</span>
+          </NavLink>
+          <NavLink
+            className="flex flex-col items-center text-gray-800 hover:text-blue-600"
+            to="/bill"
+          >
+            <HiOutlineNewspaper className="text-2xl" />
+            <span className="text-xs">bill</span>
           </NavLink>
         </div>
 
-        <div className="hidden md:flex gap-6">
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-1">
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-blue-600" : "hover:text-blue-600"
+              `flex items-center gap-1 text-gray-700 px-4 py-2 text-sm font-medium rounded-lg transition ${
+                isActive ? "text-blue-600 bg-blue-50" : "hover:text-blue-600 hover:bg-gray-50"
               }`
             }
           >
+            <FaHome className="text-lg" />
             Home
           </NavLink>
-          <NavLink
-            to="/daily-sales"
-            className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-blue-600" : "hover:text-blue-600"
-              }`
-            }
-          >
-            Daily Sales
-          </NavLink>
-          <NavLink
-            to="/MonthlySales"
-            className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-indigo-600" : "hover:text-indigo-600"
-              }`
-            }
-          >
-            Monthly Sales
-          </NavLink>
-          <NavLink
-            to="/Stock"
-            className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-yellow-600" : "hover:text-yellow-600"
-              }`
-            }
-          >
-            Stock
-          </NavLink>
-          <NavLink
-            to="/CustomerList"
-            className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-yellow-600" : "hover:text-yellow-600"
-              }`
-            }
-          >
-            Customers
-          </NavLink>
-          <NavLink
-            to="/Addcustomer"
-            className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-red-600" : "hover:text-red-600"
-              }`
-            }
-          >
-            Add Customer
-          </NavLink>
+          
+          {/* change */}
+          <div className="group relative">
+            <button className="flex items-center gap-1 text-gray-700 px-4 py-2 text-sm font-medium rounded-lg hover:text-blue-600 hover:bg-gray-50">
+              <FaChartLine className="text-lg" />
+              Daily Sales
+              <FaChevronDown className="text-xs mt-1" />
+            </button>
+            <div className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg p-2 min-w-[200px] z-10 border border-gray-100">
+              <NavLink
+                to="/daily-sales"
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-sm rounded-md ${
+                    isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"
+                  }`
+                }
+              >
+                Add Sales
+              </NavLink>
+              <NavLink
+                to="/bill"
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-sm rounded-md ${
+                    isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"
+                  }`
+                }
+              >
+               Print bill
+              </NavLink>
+            </div>
+          </div>
+          
+          <div className="group relative">
+            <button className="flex items-center gap-1 text-gray-700 px-4 py-2 text-sm font-medium rounded-lg hover:text-blue-600 hover:bg-gray-50">
+              <FaCubesStacked className="text-lg" />
+              Inventory
+              <FaChevronDown className="text-xs mt-1" />
+            </button>
+            <div className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg p-2 min-w-[200px] z-10 border border-gray-100">
+              <NavLink
+                to="/Stock"
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-sm rounded-md ${
+                    isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"
+                  }`
+                }
+              >
+                Stock Management
+              </NavLink>
+              <NavLink
+                to="/MonthlySales"
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-sm rounded-md ${
+                    isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"
+                  }`
+                }
+              >
+                Monthly Reports
+              </NavLink>
+            </div>
+          </div>
+          
+          <div className="group relative">
+            <button className="flex items-center gap-1 text-gray-700 px-4 py-2 text-sm font-medium rounded-lg hover:text-blue-600 hover:bg-gray-50">
+              <FaUsers className="text-lg" />
+              Customers
+              <FaChevronDown className="text-xs mt-1" />
+            </button>
+            <div className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg p-2 min-w-[200px] z-10 border border-gray-100">
+              <NavLink
+                to="/CustomerList"
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-sm rounded-md ${
+                    isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"
+                  }`
+                }
+              >
+                Customer List
+              </NavLink>
+              <NavLink
+                to="/Addcustomer"
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-sm rounded-md ${
+                    isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"
+                  }`
+                }
+              >
+                Add Customer
+              </NavLink>
+            </div>
+          </div>
+          
           <NavLink
             to="/AddWholesaler"
             className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-green-600" : "hover:text-green-600"
+              `flex items-center gap-1 text-gray-700 px-4 py-2 text-sm font-medium rounded-lg transition ${
+                isActive ? "text-green-600 bg-green-50" : "hover:text-green-600 hover:bg-gray-50"
               }`
             }
           >
-            Wholesaler
+            <BsSunglasses className="text-lg" />
+            Wholesalers
           </NavLink>
-          
-          {/* <NavLink
-            to="/WholesalerList"
-            className={({ isActive }) =>
-              `text-gray-800 px-5 py-2 text-lg font-medium transition ${
-                isActive ? "text-purple-600" : "hover:text-purple-600"
-              }`
-            }
-          >
-            Wholesaler List
-          </NavLink> */}
-         
-          
-         
         </div>
       </nav>
 

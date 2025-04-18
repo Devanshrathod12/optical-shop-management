@@ -14,7 +14,7 @@ const WholesalerSchema = new mongoose.Schema({
 WholesalerSchema.pre("save", function (next) {
   console.log("Checking if uniqueID should be generated...");
 
-  // सिर्फ़ नए डॉक्यूमेंट के लिए uniqueID बनाओ, अपडेट या डिलीट पर नहीं
+  // sirf ek baar unique id banegi fir data - ho  ya + wo unique id change nhi hogi
   if (!this.isNew) {
     console.log("Existing document, skipping uniqueID generation.");
     return next();
@@ -22,22 +22,20 @@ WholesalerSchema.pre("save", function (next) {
 
   console.log("Generating uniqueID...");
 
-  // Ensure all required fields exist
+  // sab filed hai ya nhi 
   if (!this.name || !this.framePrice || !this.frameType || !this.quantity || !this.frameBrand || !this.billNumber) {
     throw new Error("Missing fields for ID generation!");
   }
 
-  // Extracting necessary details
-  const nameInitial = this.name.charAt(0).toUpperCase(); // First letter of Name
-  const priceDigits = this.framePrice.toString().slice(0, 2); // First 2 digits of Price
-  const typeInitial = this.frameType.charAt(0).toUpperCase(); // First letter of Frame Type
-  const quantityDigit = this.quantity.toString().slice(-1); // Last digit of Quantity
-  const billFirstDigit = this.billNumber.toString().charAt(0); // First digit of Bill Number
+  const nameInitial = this.name.charAt(0).toUpperCase();
+  const priceDigits = this.framePrice.toString().slice(0, 2); 
+  const typeInitial = this.frameType.charAt(0).toUpperCase();
+  const quantityDigit = this.quantity.toString().slice(-1); 
+  const billFirstDigit = this.billNumber.toString().charAt(0); 
 
-  // Generate a 2-character Random String
   const randomPart = Math.random().toString(36).substring(2, 4).toUpperCase();
 
-  // Final Unique ID
+  // Final Unique ID yha milegi wo bhi insub ko combine kiya hai enko combine kr ke unique id genrat hogi
   this.uniqueID = `${nameInitial}${priceDigits}${typeInitial}${quantityDigit}${billFirstDigit}${randomPart}`;
 
   console.log("Final uniqueID:", this.uniqueID);

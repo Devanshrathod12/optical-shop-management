@@ -73,7 +73,7 @@ const MonthlySales = () => {
     }
   };
 
-  // PDF Generation (exactly as in your original)
+  // PDF Generation
   const generatePDF = () => {
     const doc = new jsPDF({ orientation: "landscape" });
   
@@ -126,7 +126,7 @@ const MonthlySales = () => {
     doc.save("Monthly-Sales-Report.pdf");
   };
 
-  // Excel Generation (exactly as in your original)
+  // Excel Generation 
   const generateExcel = () => {
     const workbook = XLSX.utils.book_new();
     const worksheetData = [

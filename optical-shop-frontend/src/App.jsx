@@ -11,6 +11,8 @@ import CustomerList from "./components/CustomerList/CustomerList";
 import Navbar from "./components/Navbar/Navbar";
 import InstallButton from "./components/install/InstallButton";
 import Stock from "./components/stock/Stock";
+import SendSMS from "./components/SMS/SendSMS";
+import PrescriptionBillGenerator from "./components/BillPrint/PrescriptionBillGenerator";
 import moment from "moment";
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
         <Route path="/Addcustomer" element={<AddCustomer />} />
         <Route path="/CustomerList" element={<CustomerList />} />
         <Route path="/stock" element={<Stock />} />
+        <Route path="/SendSMS" element={<SendSMS />} />
+        <Route path="/bill" element={<PrescriptionBillGenerator />} />
       </Routes>
     </Router>
   );

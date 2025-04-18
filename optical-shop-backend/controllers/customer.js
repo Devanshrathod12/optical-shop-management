@@ -11,8 +11,8 @@ exports.customeradd = async (req,res) => {
 }
 exports.customerget = async (req, res) => {
     try {
-      const customers = await customer.find(); // ✅ Corrected model usage
-      res.status(200).json({ success: true, customers }); // ✅ Send correct response format
+      const customers = await customer.find(); //  Corrected model usage
+      res.status(200).json({ success: true, customers }); //  Send response
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }
@@ -20,10 +20,10 @@ exports.customerget = async (req, res) => {
 
   exports.customerUpdate = async (req, res) => {
     try {
-        const { id } = req.params; // 🆔 URL se customer ID lo
-        const updateData = req.body; // 📦 Jo bhi naye data aayenge wo yahan honge
+        const { id } = req.params; //  URL se customer ID lo
+        const updateData = req.body; //  Jo bhi naye data aayenge wo yahan honge
 
-        // 🔄 Customer data update karo
+        //  Customer data update karo
         const updatedCustomer = await customer.findByIdAndUpdate(id, updateData, { new: true });
 
         if (!updatedCustomer) {

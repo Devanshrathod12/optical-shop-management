@@ -1,6 +1,6 @@
 const Sales = require("../models/Sales");
 
-// Add Daily Sale
+// Add Daily Sale Api
 exports.addSale = async (req, res) => {
   try {
     const sale = new Sales(req.body);
@@ -11,7 +11,7 @@ exports.addSale = async (req, res) => {
   }
 };
 
-// Get Monthly Sales
+// Get Monthly Sales Api
 exports.getMonthlySales = async (req, res) => {
   try {
     const sales = await Sales.find();
@@ -23,7 +23,7 @@ exports.getMonthlySales = async (req, res) => {
 
 exports.updateSale = async (req, res) => {
   try {
-    const { id } = req.params; // Get sale ID from URL
+    const { id } = req.params; //  sale ID url se yha se milegi
     const updatedSale = await Sales.findByIdAndUpdate(id, req.body, { new: true });
 
     if (!updatedSale) {
