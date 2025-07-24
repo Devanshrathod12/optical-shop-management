@@ -5,6 +5,7 @@ const cors = require("cors");
 const SMS = require('./routes/SMS');
 const salesroutes = require("./routes/sales")
 const Wholesaler = require("./routes/wholesalerRoutes")
+const userRoutes = require("./routes/userRoutes")
 const customer = require("./routes/customer")
 const bodyParser = require('body-parser');
 const app = express();
@@ -22,5 +23,6 @@ app.use("/api/sales", salesroutes)
 app.use("/api/Who",Wholesaler)
 app.use("/api/custo",customer)
 app.use("/api/sms", SMS)
+app.use("/api/Users",userRoutes)
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

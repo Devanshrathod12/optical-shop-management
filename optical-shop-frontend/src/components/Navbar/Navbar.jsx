@@ -1,19 +1,30 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import logo from "../../assets/logo1.png";
+import { NavLink, useNavigate } from "react-router-dom";
+import logo from "../../assets/logoweb.png";
+
 import {
   FaChartLine,
   FaUsers,
   FaUserPlus,
   FaHome,
   FaChevronDown,
+  FaSignOutAlt, // Logout icon ke liye
 } from "react-icons/fa";
 import { FaCubesStacked } from "react-icons/fa6";
 import { SlCalender } from "react-icons/sl";
 import { BsSunglasses } from "react-icons/bs";
 import { HiOutlineNewspaper } from "react-icons/hi2";
+import { useAuth } from "../../components/context/AuthContext"; // Auth context import karein
 
 const Navbar = () => {
+  const { logOut, user } = useAuth(); // Logout function aur user data lein
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logOut();
+    navigate("/auth"); // Logout ke baad login page par bhejein
+  };
+
   return (
     <div>
       {/* Desktop Navbar */}
@@ -63,7 +74,6 @@ const Navbar = () => {
             Home
           </NavLink>
           
-          {/* change */}
           <div className="group relative">
             <button className="flex items-center gap-1 text-gray-700 px-4 py-2 text-sm font-medium rounded-lg hover:text-blue-600 hover:bg-gray-50">
               <FaChartLine className="text-lg" />
@@ -165,6 +175,23 @@ const Navbar = () => {
             <BsSunglasses className="text-lg" />
             Wholesalers
           </NavLink>
+          
+          {/* --- LOGOUT BUTTON (DESKTOP) --- */}
+          <div className="group relative ml-4">
+            <button className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 hover:bg-red-100 hover:text-red-600">
+                <span>{user?.name.split(' ')[0]}</span>
+                <FaChevronDown className="text-xs" />
+            </button>
+            <div className="absolute hidden right-0 group-hover:block bg-white shadow-lg rounded-lg p-2 min-w-[150px] z-10 border border-gray-100">
+                <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 rounded-md hover:bg-red-50"
+                >
+                    <FaSignOutAlt />
+                    Logout
+                </button>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -172,60 +199,34 @@ const Navbar = () => {
       <div className="fixed bottom-0 w-full flex justify-around items-center bg-white py-3 shadow-lg md:hidden z-50 border-t border-gray-300">
         <NavLink
           to="/"
-          className={({ isActive }) =>
-            `flex flex-col items-center text-gray-600 ${
-              isActive ? "text-blue-600" : "hover:text-blue-600"
-            }`
-          }
+          className={({ isActive }) => `flex flex-col items-center text-gray-600 ${ isActive ? "text-blue-600" : "hover:text-blue-600" }` }
         >
           <FaHome className="text-xl" />
           <span className="text-xs">Home</span>
         </NavLink>
         <NavLink
           to="/daily-sales"
-          className={({ isActive }) =>
-            `flex flex-col items-center text-gray-600 ${
-              isActive ? "text-blue-600" : "hover:text-blue-600"
-            }`
-          }
+          className={({ isActive }) => `flex flex-col items-center text-gray-600 ${ isActive ? "text-blue-600" : "hover:text-blue-600" }` }
         >
           <FaChartLine className="text-xl" />
           <span className="text-xs">Daily Sales</span>
         </NavLink>
         <NavLink
-          to="/AddWholesaler"
-          className={({ isActive }) =>
-            `flex flex-col items-center text-gray-600 ${
-              isActive ? "text-green-600" : "hover:text-green-600"
-            }`
-          }
-        >
-          <BsSunglasses className="text-xl" />
-          <span className="text-xs">Wholesaler</span>
-        </NavLink>
-        <NavLink
           to="/CustomerList"
-          className={({ isActive }) =>
-            `flex flex-col items-center text-gray-600 ${
-              isActive ? "text-red-600" : "hover:text-red-600"
-            }`
-          }
+          className={({ isActive }) => `flex flex-col items-center text-gray-600 ${ isActive ? "text-red-600" : "hover:text-red-600" }` }
         >
           <FaUsers className="text-xl" />
           <span className="text-xs">Customers</span>
         </NavLink>
-        <NavLink
-          to="/Addcustomer"
-          className={({ isActive }) =>
-            `flex flex-col items-center text-gray-600 ${
-              isActive ? "text-red-600" : "hover:text-red-600"
-            }`
-          }
-        >
-          <FaUserPlus className="text-xl" />
-          <span className="text-xs">Add Customer</span>
-        </NavLink>
         
+        {/* --- LOGOUT BUTTON (MOBILE) --- */}
+        <button
+          onClick={handleLogout}
+          className="flex flex-col items-center text-gray-600 hover:text-red-600"
+        >
+          <FaSignOutAlt className="text-xl" />
+          <span className="text-xs">Logout</span>
+        </button>
       </div>
     </div>
   );

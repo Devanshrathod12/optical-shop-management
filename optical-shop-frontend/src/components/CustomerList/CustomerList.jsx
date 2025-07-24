@@ -78,13 +78,21 @@ const CustomerList = () => {
   });
 
   // Sort - customers in both lists first
-  const sortedData = uniqueData.sort((a, b) => {
-    const aInBoth = customers.some(c => c.contactNo === a.contactNo) && 
-                   monthlySales.some(s => s.contactNo === a.contactNo);
-    const bInBoth = customers.some(c => c.contactNo === b.contactNo) && 
-                   monthlySales.some(s => s.contactNo === b.contactNo);
-    return bInBoth - aInBoth;
-  });
+const sortedData = uniqueData.sort((a, b) => {
+  const aContact = a?.contactNo;
+  const bContact = b?.contactNo;
+
+  const aInBoth = aContact &&
+    customers.some(c => c?.contactNo === aContact) &&
+    monthlySales.some(s => s?.contactNo === aContact);
+
+  const bInBoth = bContact &&
+    customers.some(c => c?.contactNo === bContact) &&
+    monthlySales.some(s => s?.contactNo === bContact);
+
+  return bInBoth - aInBoth;
+});
+
 
   // Search filter
   const filteredData = sortedData.filter(item => {
