@@ -10,7 +10,7 @@ const customer = require("./routes/customer")
 const bodyParser = require('body-parser');
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "*", credentials: true })); // ✅ CORS ENABLED
+app.use(cors({ origin: "*", credentials: true }));
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
