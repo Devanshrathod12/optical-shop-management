@@ -2,25 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../components/context/AuthContext";
-import { signup, login } from "../components/services/authService";
 
 const AnimatedBackground = () => {
   useEffect(() => {
     const styleSheet = document.createElement("style");
     styleSheet.innerText = `
             @keyframes animateShapes {
-                0% {
-                    transform: translateY(0) rotate(0deg);
-                    opacity: 1;
-                    border-radius: 0;
-                }
-                100% {
-                    transform: translateY(-1000px) rotate(720deg);
-                    opacity: 0;
-                    border-radius: 50%;
-                }
-            }
-        `;
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+                100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+            }`;
     document.head.appendChild(styleSheet);
     return () => {
       document.head.removeChild(styleSheet);
@@ -68,38 +58,40 @@ const Auth = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
   const { loginAction } = useAuth();
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-  const validateEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const apiCall = async (endpoint, body) => {
+    const res = await fetch(`${API_URL}/api/Users/${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message || "Something went wrong");
+    }
+    return data;
   };
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
     if (!email || !password || (authMode === "signup" && !name)) {
-      toast.error("All fields are required!");
-      setLoading(false);
-      return;
+      return toast.error("All fields are required!");
     }
     if (!validateEmail(email)) {
-      toast.error("Please enter a valid email address.");
-      setLoading(false);
-      return;
+      return toast.error("Please enter a valid email address.");
     }
-
+    setLoading(true);
     try {
-      let response;
-      if (authMode === "login") {
-        response = await login({ email, password });
-        toast.success("Logged in successfully!");
-      } else {
-        response = await signup({ name, email, password });
-        toast.success("Account created successfully!");
-      }
+      const endpoint = authMode === "login" ? "login" : "signup";
+      const body =
+        authMode === "login" ? { email, password } : { name, email, password };
+      const response = await apiCall(endpoint, body);
+      toast.success(response.message);
       loginAction(response);
       navigate("/");
     } catch (error) {
@@ -109,47 +101,71 @@ const Auth = () => {
     }
   };
 
-  const handleForgotPassword = (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
     if (!validateEmail(email)) {
-      toast.error("Please enter a valid email to continue.");
-      return;
+      return toast.error("Please enter a valid email to continue.");
     }
-    console.log(`Sending OTP to ${email}`);
-    toast.info(`An OTP has been sent to ${email}`);
-    setAuthMode("verifyOtp");
+    setLoading(true);
+    try {
+      const response = await apiCall("forgot-password", { email });
+      toast.success(response.message);
+      setAuthMode("verifyOtp");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerifyOtp = (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
     if (otp.length < 6) {
-      toast.error("Please enter a valid OTP.");
-      return;
+      return toast.error("Please enter a valid OTP.");
     }
-    console.log(`Verifying OTP ${otp}`);
-    toast.success("OTP verified successfully!");
-    setAuthMode("resetPassword");
+    setLoading(true);
+    try {
+      const response = await apiCall("verify-otp", { email, otp });
+      toast.success(response.message);
+      setAuthMode("resetPassword");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleResetPassword = (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
     if (password.length < 6) {
-      toast.error("Password must be at least 6 characters long.");
-      return;
+      return toast.error("Password must be at least 6 characters long.");
     }
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match.");
-      return;
+      return toast.error("Passwords do not match.");
     }
-    console.log("Resetting password...");
-    toast.success("Password has been reset successfully! Please login.");
-    setAuthMode("login");
-    setPassword("");
-    setConfirmPassword("");
-    setOtp("");
+    setLoading(true);
+    try {
+      const response = await apiCall("reset-password", {
+        email,
+        otp,
+        password,
+      });
+      toast.success(response.message);
+      setAuthMode("login");
+      setPassword("");
+      setConfirmPassword("");
+      setOtp("");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderForm = () => {
+    // Form JSX remains the same as you provided.
+    // Copy the renderForm function from your original code here.
+    // ...
     switch (authMode) {
       case "forgotPassword":
         return (
@@ -165,17 +181,20 @@ const Auth = () => {
                 style={styles.input}
               />
               <button type="submit" style={styles.button} disabled={loading}>
-                {loading ? "Sending..." : "Send OTP"}
+                {" "}
+                {loading ? "Sending..." : "Send OTP"}{" "}
               </button>
             </form>
             <p style={styles.toggleText}>
+              {" "}
               Remembered your password?{" "}
               <span
                 onClick={() => setAuthMode("login")}
                 style={styles.toggleLink}
               >
-                Login
-              </span>
+                {" "}
+                Login{" "}
+              </span>{" "}
             </p>
           </>
         );
@@ -184,7 +203,8 @@ const Auth = () => {
           <>
             <h2 style={styles.title}>Verify OTP</h2>
             <p style={styles.subtitle}>
-              Check your email for the One-Time Password
+              {" "}
+              Check your email for the One-Time Password{" "}
             </p>
             <form onSubmit={handleVerifyOtp} style={styles.form}>
               <input
@@ -195,17 +215,17 @@ const Auth = () => {
                 style={styles.input}
               />
               <button type="submit" style={styles.button} disabled={loading}>
-                {loading ? "Verifying..." : "Verify"}
+                {" "}
+                {loading ? "Verifying..." : "Verify"}{" "}
               </button>
             </form>
             <p style={styles.toggleText}>
+              {" "}
               Didn't receive code?{" "}
-              <span
-                onClick={() => setAuthMode("forgotPassword")}
-                style={styles.toggleLink}
-              >
-                Resend
-              </span>
+              <span onClick={handleForgotPassword} style={styles.toggleLink}>
+                {" "}
+                Resend{" "}
+              </span>{" "}
             </p>
           </>
         );
@@ -230,7 +250,8 @@ const Auth = () => {
                 style={styles.input}
               />
               <button type="submit" style={styles.button} disabled={loading}>
-                {loading ? "Resetting..." : "Reset Password"}
+                {" "}
+                {loading ? "Resetting..." : "Reset Password"}{" "}
               </button>
             </form>
           </>
@@ -269,7 +290,6 @@ const Auth = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 style={styles.input}
               />
-
               {isLogin && (
                 <p
                   style={{
@@ -286,21 +306,22 @@ const Auth = () => {
                   </span>
                 </p>
               )}
-
               <button type="submit" style={styles.button} disabled={loading}>
                 {loading ? "Processing..." : isLogin ? "Login" : "Sign Up"}
               </button>
             </form>
             <p style={styles.toggleText}>
+              {" "}
               {isLogin
                 ? "Don't have an account? "
-                : "Already have an account? "}
+                : "Already have an account? "}{" "}
               <span
                 onClick={() => setAuthMode(isLogin ? "signup" : "login")}
                 style={styles.toggleLink}
               >
-                {isLogin ? "Sign Up" : "Login"}
-              </span>
+                {" "}
+                {isLogin ? "Sign Up" : "Login"}{" "}
+              </span>{" "}
             </p>
           </>
         );
@@ -315,6 +336,7 @@ const Auth = () => {
   );
 };
 
+// Styles object remains the same as you provided.
 const styles = {
   area: {
     position: "fixed",
@@ -368,11 +390,7 @@ const styles = {
     marginBottom: "30px",
     fontSize: "1rem",
   },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  },
+  form: { display: "flex", flexDirection: "column", gap: "20px" },
   input: {
     padding: "15px",
     borderRadius: "10px",
@@ -394,10 +412,7 @@ const styles = {
     cursor: "pointer",
     transition: "all 0.3s ease",
   },
-  toggleText: {
-    marginTop: "20px",
-    color: "rgba(255, 255, 255, 0.85)",
-  },
+  toggleText: { marginTop: "20px", color: "rgba(255, 255, 255, 0.85)" },
   toggleLink: {
     color: "#fff",
     fontWeight: "bold",
