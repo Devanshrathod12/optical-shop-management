@@ -12,6 +12,7 @@ const TotalFrameQuantity = stocks?.wholesalers?.reduce(
   (total, wholesaler) => total + (wholesaler.quantity || 0), 0
 ) || 0;
 
+
 const fetchMonthlySale = async () => {
   try {
     const MonthlySales = await getMonthlySales()
@@ -33,11 +34,29 @@ const currentYear = now.getFullYear();
 const currentMonth = (now.getMonth() + 1).toString().padStart(2, '0');
 const currentMonthKey = `${currentYear}-${currentMonth}`;
 
-const currentMonthSales = monthsale[currentMonthKey] || [];
+// Calculate Overall Shop Sales and Overall Profit
+let overallTotalSales = 0;
+let overallTotalProfit = 0;
 
-const totalSalesAmount = currentMonthSales.reduce((total, sale) => {
-  return total + (sale.total || 0);  // assume 'total' me sale ka amount hai
+Object.keys(monthsale).forEach(monthKey => {
+  const salesForMonth = monthsale[monthKey];
+  salesForMonth.forEach(sale => {
+    overallTotalSales += (sale.total || 0);
+    const profit = (sale.total || 0) - 
+                   (sale.framePurchasingPrice || 0) - 
+                   (sale.LensPurchasingPrice || 0) - 
+                   (sale.Fiting || 0) - 
+                   (sale.boxcloth || 0);
+    overallTotalProfit += profit;
+  });
+});
+
+// Current month sales (unchanged, still useful for Monthly Revenue card)
+const currentMonthSales = monthsale[currentMonthKey] || [];
+const totalCurrentMonthSalesAmount = currentMonthSales.reduce((total, sale) => {
+  return total + (sale.total || 0);
 }, 0);
+
 
   const fetchstockdata = async () => {
     try {
@@ -84,56 +103,44 @@ const totalSalesAmount = currentMonthSales.reduce((total, sale) => {
         </p>
       </div>
 
-      {/* <div>
-        <h1>api data get</h1>
-         <ul>
-          {stocks.map((item,index)=>(
-           <li key={index} >
-            <strong>Name</strong> {item.}
-           </li>
-          ))}
-         </ul>
-        </div> 
-       */}
-
       {/* Dashboard Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
         {[
           {
             title: "Inventory Summary",
-            desc: "Manage frames, lenses and stock",
+            desc: "Total frames in stock",
             count: `${TotalFrameQuantity} items`,
             color: "bg-blue-100 border-blue-500"
           },
           {
-            title: "Today's Sales",
-            desc: "Orders processed today",
-            count: "₹24,850",
+            title: "Overall Shop Sales", // Changed name
+            desc: "Total revenue to date", // Changed description
+            count: `₹${overallTotalSales.toLocaleString('en-IN')}`, // Display overall sales
             color: "bg-green-100 border-green-500"
           },
           {
-            title: "Pending Orders",
-            desc: "Require your attention",
-            count: "7 Orders",
-            color: "bg-amber-100 border-amber-500"
+            title: "Overall Shop Profit", // New card for profit
+            desc: "Net earnings from all sales", // Description for profit
+            count: `₹${overallTotalProfit.toLocaleString('en-IN')}`, // Display overall profit
+            color: overallTotalProfit >= 0 ? "bg-emerald-100 border-emerald-500" : "bg-red-100 border-red-500"
           },
           {
             title: "Customer Database",
             desc: "Manage client records",
-            count: `${totalCustomers}`,
+            count: `${totalCustomers} Customers`, // Added 'Customers' for clarity
             color: "bg-purple-100 border-purple-500"
           },
           {
             title: "Appointments",
             desc: "Eye tests scheduled",
-            count: "5 Today",
+            count: "5 Today", // Keep as is or update with real data if available
             color: "bg-cyan-100 border-cyan-500"
           },
           {
-            title: "Monthly Revenue",
-            desc: "Current month earnings",
-            count: `${totalSalesAmount} Sales`,
-            color: "bg-emerald-100 border-emerald-500"
+            title: "Monthly Revenue", // Renamed to differentiate from overall
+            desc: "Current month's earnings", // Clarified description
+            count: `₹${totalCurrentMonthSalesAmount.toLocaleString('en-IN')}`, // Display current month's sales
+            color: "bg-amber-100 border-amber-500" // Changed color for distinction
           }
         ].map((card, index) => (
           <div 

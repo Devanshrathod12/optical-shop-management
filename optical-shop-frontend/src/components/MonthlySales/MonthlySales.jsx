@@ -77,8 +77,9 @@ const MonthlySales = () => {
   const generatePDF = () => {
     const doc = new jsPDF({ orientation: "landscape" });
   
+    // Changed sort order here to display most recent month first
     Object.keys(sales)
-      .sort((a, b) => new Date(a) - new Date(b)) 
+      .sort((a, b) => new Date(b) - new Date(a)) 
       .forEach((month, index) => {
         const monthSales = sales[month];
   
@@ -133,8 +134,9 @@ const MonthlySales = () => {
       ["Month", "Bill No", "Date", "Customer Name", "Age", "Address", "Contact No", "Frame Name", "Glasses", "Total", "Advance", "Balance", "Frame Price", "Lens Price", "Fitting", "Box Cloth", "Profit"],
     ];
   
+    // Changed sort order here to display most recent month first
     Object.keys(sales)
-      .sort((a, b) => new Date(a) - new Date(b)) 
+      .sort((a, b) => new Date(b) - new Date(a)) 
       .forEach((month) => {
         const monthSales = sales[month];
   
@@ -195,7 +197,9 @@ const MonthlySales = () => {
         </button>
       </div>
 
-      {Object.keys(sales).sort().map(month => {
+      {Object.keys(sales)
+        .sort((a, b) => new Date(b) - new Date(a)) // Changed sort order here for rendering
+        .map(month => {
         const monthSales = sales[month];
         const totalFramePrice = monthSales.reduce((sum, sale) => sum + sale.framePurchasingPrice, 0);
         const totalLensPrice = monthSales.reduce((sum, sale) => sum + sale.LensPurchasingPrice, 0);
