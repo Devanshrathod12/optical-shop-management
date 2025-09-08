@@ -2,61 +2,73 @@ import React,{useState,useEffect} from "react";
 import logo from "../assets/homenama.png";
 import axios from "axios";
 import { useStore } from "../components/StoreContext/StoreContext";
+
 const Home = () => {
-   const [totalCustomers, setTotalCustomers] = useState(0);
+  const [totalCustomers, setTotalCustomers] = useState(0);
   const {getAllStock,getMonthlySales} = useStore()
   const [stocks,setStocks] = useState({ wholesalers: [] })
-const [monthsale, setMonthsale] = useState({});
+  const [monthsale, setMonthsale] = useState({});
 
-const TotalFrameQuantity = stocks?.wholesalers?.reduce(
-  (total, wholesaler) => total + (wholesaler.quantity || 0), 0
-) || 0;
+  const TotalFrameQuantity = stocks?.wholesalers?.reduce(
+    (total, wholesaler) => total + (wholesaler.quantity || 0), 0
+  ) || 0;
 
-
-const fetchMonthlySale = async () => {
-  try {
-    const MonthlySales = await getMonthlySales()
-    setMonthsale(MonthlySales)
-  } catch (error) {
-    console.log("error to get monthly sales data", error)
+  const fetchMonthlySale = async () => {
+    try {
+      const MonthlySales = await getMonthlySales()
+      setMonthsale(MonthlySales)
+    } catch (error) {
+      console.log("error to get monthly sales data", error)
+    }
   }
-}
-useEffect(() => {
-  fetchMonthlySale()
-}, [])
+
+  useEffect(() => {
+    fetchMonthlySale()
+  }, [])
 
   useEffect(() => {
     fetchstockdata()
   }, [])
   
   const now = new Date();
-const currentYear = now.getFullYear();
-const currentMonth = (now.getMonth() + 1).toString().padStart(2, '0');
-const currentMonthKey = `${currentYear}-${currentMonth}`;
+  const currentYear = now.getFullYear();
+  const currentMonth = (now.getMonth() + 1).toString().padStart(2, '0');
+  const currentMonthKey = `${currentYear}-${currentMonth}`;
 
-// Calculate Overall Shop Sales and Overall Profit
-let overallTotalSales = 0;
-let overallTotalProfit = 0;
+  // Calculate Overall Shop Sales and Overall Profit
+  let overallTotalSales = 0;
+  let overallTotalProfit = 0;
 
-Object.keys(monthsale).forEach(monthKey => {
-  const salesForMonth = monthsale[monthKey];
-  salesForMonth.forEach(sale => {
-    overallTotalSales += (sale.total || 0);
-    const profit = (sale.total || 0) - 
-                   (sale.framePurchasingPrice || 0) - 
-                   (sale.LensPurchasingPrice || 0) - 
-                   (sale.Fiting || 0) - 
-                   (sale.boxcloth || 0);
-    overallTotalProfit += profit;
+  Object.keys(monthsale).forEach(monthKey => {
+    const salesForMonth = monthsale[monthKey];
+    salesForMonth.forEach(sale => {
+      overallTotalSales += (sale.total || 0);
+      const profit = (sale.total || 0) - 
+                     (sale.framePurchasingPrice || 0) - 
+                     (sale.LensPurchasingPrice || 0) - 
+                     (sale.Fiting || 0) - 
+                     (sale.boxcloth || 0);
+      overallTotalProfit += profit;
+    });
   });
-});
 
-// Current month sales (unchanged, still useful for Monthly Revenue card)
-const currentMonthSales = monthsale[currentMonthKey] || [];
-const totalCurrentMonthSalesAmount = currentMonthSales.reduce((total, sale) => {
-  return total + (sale.total || 0);
-}, 0);
+  // Current month sales
+  const currentMonthSales = monthsale[currentMonthKey] || [];
+  const totalCurrentMonthSalesAmount = currentMonthSales.reduce((total, sale) => {
+    return total + (sale.total || 0);
+  }, 0);
 
+  // Monthly expenses calculation
+  const fixedExpenses = 35000; // Total fixed expenses (30000 rent + 2500 petrol + 2500 electricity)
+  const monthlyRevenue = totalCurrentMonthSalesAmount - fixedExpenses;
+  
+  // Determine color based on whether sales cover expenses
+  let expenseColor = "bg-red-100 border-red-500"; // Default to red
+  if (totalCurrentMonthSalesAmount >= fixedExpenses) {
+    expenseColor = "bg-green-100 border-green-500"; // Green if sales cover expenses
+  } else if (totalCurrentMonthSalesAmount >= fixedExpenses * 0.7) {
+    expenseColor = "bg-orange-100 border-orange-500"; // Orange if sales cover at least 70% of expenses
+  }
 
   const fetchstockdata = async () => {
     try {
@@ -68,27 +80,53 @@ const totalCurrentMonthSalesAmount = currentMonthSales.reduce((total, sale) => {
     }
   }
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchTotalCustomers = async () => {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/custo/get`);
-    const customers = Array.isArray(response.data)
-      ? response.data
-      : response.data.customers;
+      try {
+        const customersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/custo/get`);
+        const customers = Array.isArray(customersResponse.data)
+          ? customersResponse.data
+          : customersResponse.data.customers || [];
 
-    setTotalCustomers(customers.length);
-  } catch (error) {
-    console.error("Error fetching customer data:", error);
-  }
-};
+        const salesResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/sales/monthly`);
+        const salesData = salesResponse.data.sales || {};
+        const allSales = Object.values(salesData).flat().filter(sale => sale) || [];
+
+        const combinedData = [
+          ...customers.map(c => ({ 
+            ...c, 
+            isFromSales: false
+          })),
+          ...allSales.map(s => ({
+            name: s?.customerName || "",
+            contactNo: s?.contactNo || "",
+            address: s?.address || "",
+            isFromSales: true,
+            billNo: s?.billNo || "",
+            total: s?.total || 0
+          }))
+        ].filter(item => item?.contactNo);
+
+        const uniqueCustomers = [];
+        const seenContacts = new Set();
+        combinedData.forEach(item => {
+          if (item.contactNo && !seenContacts.has(item.contactNo)) {
+            seenContacts.add(item.contactNo);
+            uniqueCustomers.push(item);
+          }
+        });
+
+        setTotalCustomers(uniqueCustomers.length);
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      }
+    };
 
     fetchTotalCustomers();
   }, []);
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 flex flex-col items-center justify-start px-4 sm:px-6 md:px-10 py-12">
-      {/* Header */}
       <div className="w-full max-w-6xl mx-auto text-center mb-12">
         <img 
           src={logo} 
@@ -103,7 +141,6 @@ const totalCurrentMonthSalesAmount = currentMonthSales.reduce((total, sale) => {
         </p>
       </div>
 
-      {/* Dashboard Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
         {[
           {
@@ -113,34 +150,34 @@ const totalCurrentMonthSalesAmount = currentMonthSales.reduce((total, sale) => {
             color: "bg-blue-100 border-blue-500"
           },
           {
-            title: "Overall Shop Sales", // Changed name
-            desc: "Total revenue to date", // Changed description
-            count: `₹${overallTotalSales.toLocaleString('en-IN')}`, // Display overall sales
+            title: "Overall Shop Sales",
+            desc: "Total revenue to date",
+            count: `₹${overallTotalSales.toLocaleString('en-IN')}`,
             color: "bg-green-100 border-green-500"
           },
           {
-            title: "Overall Shop Profit", // New card for profit
-            desc: "Net earnings from all sales", // Description for profit
-            count: `₹${overallTotalProfit.toLocaleString('en-IN')}`, // Display overall profit
+            title: "Overall Shop Profit",
+            desc: "Net earnings from all sales",
+            count: `₹${overallTotalProfit.toLocaleString('en-IN')}`,
             color: overallTotalProfit >= 0 ? "bg-emerald-100 border-emerald-500" : "bg-red-100 border-red-500"
           },
           {
             title: "Customer Database",
-            desc: "Manage client records",
-            count: `${totalCustomers} Customers`, // Added 'Customers' for clarity
+            desc: "Total unique customers",
+            count: `${totalCustomers} Customers`,
             color: "bg-purple-100 border-purple-500"
           },
           {
-            title: "Appointments",
-            desc: "Eye tests scheduled",
-            count: "5 Today", // Keep as is or update with real data if available
-            color: "bg-cyan-100 border-cyan-500"
+            title: "Monthly Expenses",
+            desc: "Fixed costs: ₹30k rent + ₹2.5k petrol + ₹2.5k electricity",
+            count: `₹${fixedExpenses.toLocaleString('en-IN')}`,
+            color: "bg-gray-100 border-gray-500"
           },
           {
-            title: "Monthly Revenue", // Renamed to differentiate from overall
-            desc: "Current month's earnings", // Clarified description
-            count: `₹${totalCurrentMonthSalesAmount.toLocaleString('en-IN')}`, // Display current month's sales
-            color: "bg-amber-100 border-amber-500" // Changed color for distinction
+            title: "Monthly Revenue",
+            desc: "Current month's earnings after expenses",
+            count: `₹${monthlyRevenue.toLocaleString('en-IN')}`,
+            color: expenseColor
           }
         ].map((card, index) => (
           <div 
@@ -154,7 +191,6 @@ const totalCurrentMonthSalesAmount = currentMonthSales.reduce((total, sale) => {
         ))}
       </div>
 
-      {/* Quick Actions */}
       <div className="mt-12 w-full max-w-6xl mx-auto">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
