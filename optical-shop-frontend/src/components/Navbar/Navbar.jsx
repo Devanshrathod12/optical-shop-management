@@ -101,6 +101,16 @@ const Navbar = () => {
               >
                Print bill
               </NavLink>
+              <NavLink
+                to="/notification"
+                className={({ isActive }) =>
+                  `block px-4 py-2 text-sm rounded-md ${
+                    isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50"
+                  }`
+                }
+              >
+             old customer
+              </NavLink>
             </div>
           </div>
           

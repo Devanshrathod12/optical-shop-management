@@ -18,6 +18,7 @@ import InstallButton from "./components/install/InstallButton";
 import Stock from "./components/stock/Stock";
 import SendSMS from "./components/SMS/SendSMS";
 import PrescriptionBillGenerator from "./components/BillPrint/PrescriptionBillGenerator";
+import NotificationForOldCustomer from "./components/NotificationForOldCutomer/NotificationForOldCutomer";
 
 
 const AppLayout = () => {
@@ -53,6 +54,7 @@ function App() {
             <Route path="/stock" element={<Stock />} />
             <Route path="/SendSMS" element={<SendSMS />} />
             <Route path="/bill" element={<PrescriptionBillGenerator />} />
+            <Route path="/notification" element={<NotificationForOldCustomer />} />
           </Route>
           
           {/* Agar koi galat URL daale to Auth page par bhej do */}
