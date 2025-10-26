@@ -310,7 +310,7 @@ const Auth = () => {
                 {loading ? "Processing..." : isLogin ? "Login" : "Sign Up"}
               </button>
             </form>
-            <p style={styles.toggleText}>
+            {/* <p style={styles.toggleText}>
               {" "}
               {isLogin
                 ? "Don't have an account? "
@@ -322,7 +322,7 @@ const Auth = () => {
                 {" "}
                 {isLogin ? "Sign Up" : "Login"}{" "}
               </span>{" "}
-            </p>
+            </p> */}
           </>
         );
     }

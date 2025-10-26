@@ -228,6 +228,13 @@ const Navbar = () => {
           <FaUsers className="text-xl" />
           <span className="text-xs">Customers</span>
         </NavLink>
+        <NavLink
+          to="/NotificationForOldCustomer"
+          className={({ isActive }) => `flex flex-col items-center text-gray-600 ${ isActive ? "text-red-600" : "hover:text-red-600" }` }
+        >
+          <FaUsers className="text-xl" />
+          <span className="text-xs">Notification</span>
+        </NavLink>
         
         {/* --- LOGOUT BUTTON (MOBILE) --- */}
         <button

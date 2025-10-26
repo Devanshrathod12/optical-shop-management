@@ -9,29 +9,42 @@ const StoreContext = createContext();
 export const StoreProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
-  // ======================= SALES API FUNCTIONS =======================
   const addSale = async (saleData) => {
+    if (!saleData.uniqueID || saleData.uniqueID.trim() === "") {
+      toast.error("Frame Unique ID is required!");
+      throw new Error("Unique ID is required");
+    }
+
     setLoading(true);
     try {
-      const response = await Axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/sales/add`,
-        saleData
+      const quantityResponse = await Axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/who/update-quantity/${saleData.uniqueID}`
       );
-      
-      if (saleData.uniqueID) {
+
+      if (quantityResponse.data && quantityResponse.status === 200) {
+        toast.success("Frame quantity updated successfully!");
+        
         try {
-          await updateFrameQuantity(saleData.uniqueID);
-          toast.success("Frame quantity updated successfully!");
-        } catch (error) {
-          toast.warning("Sale added but frame quantity update failed");
-          console.error("Frame update error:", error);
+          const saleResponse = await Axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/api/sales/add`,
+            saleData
+          );
+          toast.success("Sale added successfully!");
+          return saleResponse.data;
+        } catch (saleError) {
+          toast.error(saleError.response?.data?.message || "Error adding sale");
+          console.error("Sale Error:", saleError);
+          throw saleError;
         }
       }
-      
-      toast.success("Sale added successfully!");
-      return response.data;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error adding sale");
+      if (error.response?.status === 404) {
+        toast.error("Invalid Unique ID! Frame not found.");
+      } else if (error.response?.status === 400) {
+        toast.error(error.response?.data?.message || "Invalid Unique ID or frame out of stock!");
+      } else {
+        toast.error(error.response?.data?.message || "Error updating frame quantity");
+      }
       console.error("Error:", error);
       throw error;
     } finally {
@@ -81,7 +94,6 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
-  // ======================= STOCK API FUNCTIONS =======================
   const getAllStock = async () => {
     setLoading(true);
     try {
@@ -102,7 +114,7 @@ export const StoreProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await Axios.patch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/Who/update-quantity/${uniqueID}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/who/update-quantity/${uniqueID}`
       );
       return response.data;
     } catch (error) {
@@ -114,18 +126,12 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
-  // ======================= EXPORT FUNCTIONS =======================
   const value = {
-    // Sales functions
     addSale,
     getMonthlySales,
     updateSale,
-    
-    // Stock functions
     getAllStock,
     updateFrameQuantity,
-    
-    // State
     loading
   };
 

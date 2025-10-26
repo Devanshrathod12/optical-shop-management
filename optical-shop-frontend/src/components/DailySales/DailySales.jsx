@@ -34,7 +34,6 @@ const DailySales = () => {
     e.preventDefault();
     try {
       await addSale(sale);
-      // Reset form after successful submission
       setSale({
         billNo: "",
         date: "",
@@ -68,7 +67,6 @@ const DailySales = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Bill No */}
           <div>
             <label htmlFor="billNo" className="block text-sm font-medium text-gray-700 mb-1">
               Bill No:
@@ -85,7 +83,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Date */}
           <div>
             <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
               Date:
@@ -101,7 +98,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Customer Name */}
           <div>
             <label htmlFor="customerName" className="block text-sm font-medium text-gray-700 mb-1">
               Customer Name:
@@ -118,7 +114,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Age */}
           <div>
             <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
               Age:
@@ -135,7 +130,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Address */}
           <div>
             <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
               Address:
@@ -152,7 +146,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Contact No */}
           <div>
             <label htmlFor="contactNo" className="block text-sm font-medium text-gray-700 mb-1">
               Contact No:
@@ -169,7 +162,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Lens Type */}
           <div>
             <label htmlFor="lensType" className="block text-sm font-medium text-gray-700 mb-1">
               Lens Type:
@@ -186,7 +178,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Frame Name */}
           <div>
             <label htmlFor="frameName" className="block text-sm font-medium text-gray-700 mb-1">
               Frame Name:
@@ -203,10 +194,9 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Unique ID */}
           <div>
             <label htmlFor="uniqueID" className="block text-sm font-medium text-gray-700 mb-1">
-              Frame Unique ID (optional):
+              Frame Unique ID:
             </label>
             <input
               type="text"
@@ -215,11 +205,11 @@ const DailySales = () => {
               placeholder="Enter Frame Unique ID to update quantity"
               onChange={handleChange}
               value={sale.uniqueID}
+              required
               className="w-full px-4 py-2 border border-gray-200 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-gray-50"
             />
           </div>
 
-          {/* Glasses */}
           <div>
             <label htmlFor="glasses" className="block text-sm font-medium text-gray-700 mb-1">
               Glasses:
@@ -236,7 +226,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Total */}
           <div>
             <label htmlFor="total" className="block text-sm font-medium text-gray-700 mb-1">
               Total:
@@ -253,7 +242,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Advance */}
           <div>
             <label htmlFor="advance" className="block text-sm font-medium text-gray-700 mb-1">
               Advance:
@@ -270,7 +258,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Balance */}
           <div>
             <label htmlFor="balance" className="block text-sm font-medium text-gray-700 mb-1">
               Balance:
@@ -287,7 +274,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Frame Purchasing Price */}
           <div>
             <label htmlFor="framePurchasingPrice" className="block text-sm font-medium text-gray-700 mb-1">
               Frame Purchasing Price:
@@ -304,7 +290,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Lens Purchasing Price */}
           <div>
             <label htmlFor="LensPurchasingPrice" className="block text-sm font-medium text-gray-700 mb-1">
               Lens Purchasing Price:
@@ -321,7 +306,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Fitting */}
           <div>
             <label htmlFor="Fiting" className="block text-sm font-medium text-gray-700 mb-1">
               Fitting:
@@ -338,7 +322,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Box & Cloth */}
           <div>
             <label htmlFor="boxcloth" className="block text-sm font-medium text-gray-700 mb-1">
               Box & Cloth:
@@ -355,7 +338,6 @@ const DailySales = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <div className="col-span-1 md:col-span-2 flex justify-center gap-4 mt-4">
             <button
               type="submit"
@@ -364,6 +346,7 @@ const DailySales = () => {
                 loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-500 hover:bg-indigo-600'
               }`}
             >
+              
               {loading ? 'Processing...' : 'Add Sale'}
             </button>
           </div>

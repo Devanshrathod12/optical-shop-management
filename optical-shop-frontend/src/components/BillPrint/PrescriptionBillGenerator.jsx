@@ -200,7 +200,7 @@ const MyDocument = ({ customerData }) => (
             <Text style={styles.tagline}>Opticians & Contact Lenses</Text>
             <Text style={styles.tagline}>Enhancing your Vision with style</Text>
             <Text style={styles.address}>A 21-A, Silicon City Branch, INDORE (M.P.)</Text>
-            <Text style={styles.address}>Mob. : 8871951440</Text>
+            <Text style={styles.address}>Mob. : 8871951440 , 7000129446</Text>
           </View>
 
           {/* Bill No and Date Row */}
@@ -457,7 +457,7 @@ const PrescriptionBillGenerator = () => {
         <h2 className="text-2xl font-bold text-blue-600">SHREE VINAYAK OPTICAL</h2>
         <p className="text-gray-600 italic">Opticians & Contact Lenses</p>
         <p className="text-sm text-gray-500">A 21-A, Silicon City Branch, INDORE (M.P.)</p>
-        <p className="text-sm text-gray-500">Mob. : 8871951440</p>
+        <p className="text-sm text-gray-500">Mob. : 8871951440 | 7000129446</p>
       </div>
       
       <h2 className="text-xl font-bold mb-6 text-center border-b pb-2">Prescription Bill Generator</h2>
