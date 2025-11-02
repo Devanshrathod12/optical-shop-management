@@ -4,6 +4,11 @@ import moment from 'moment';
 import { FaWhatsapp, FaUserClock, FaRedo, FaFilter, FaSpinner } from 'react-icons/fa';
 import { FiAlertCircle, FiCheckCircle } from 'react-icons/fi'; // For status icons
 
+// --- *** IMPORTANT *** ---
+// --- Set your shop's name here ---
+const YOUR_SHOP_NAME = "Shree vinayak Optical";
+// --- *** ---
+
 const NotificationForOldCustomer = () => {
   const [customersData, setCustomersData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -208,86 +213,116 @@ const NotificationForOldCustomer = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCustomers.map((customer, index) => (
-          <div 
-            key={index} 
-            className={`bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border 
-              ${customer.isRepeat ? 'border-green-400' : 'border-gray-200'}
-              ${customer.monthsSinceLastPurchase > 6 ? 'bg-orange-50' : 
-                customer.monthsSinceLastPurchase > 3 ? 'bg-yellow-50' : 'bg-white'}
-            `}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-gray-800 flex items-center">
-                {customer.name || 'N/A'}
-                {customer.isRepeat && (
-                  <span className="ml-2 px-2 py-0.5 bg-green-200 text-green-800 text-xs font-semibold rounded-full flex items-center">
-                    <FaRedo className="mr-1" /> Repeat
+        {filteredCustomers.map((customer, index) => {
+          
+          // --- WHATSAPP LOGIC START ---
+          const isOldCustomer = customer.monthsSinceLastPurchase !== Infinity;
+          let message = "";
+
+          if (isOldCustomer) {
+            message = `Hello ${customer.name},\n\nThis is a friendly reminder from ${YOUR_SHOP_NAME}.\n\nWe noticed your last visit was on ${customer.lastPurchaseDateFormatted}, about ${customer.monthsSinceLastPurchase} months ago.\n\nIt might be time for an eye check-up, or perhaps you'd like to see our new collection! We're here to help with all your eyewear needs.\n\nWe value you as a customer and hope to see you soon!\n\nBest Regards,\nThe ${YOUR_SHOP_NAME} Team`;
+          } else {
+            message = `Hello ${customer.name},\n\nThis is a message from ${YOUR_SHOP_NAME}.\n\nWe'd love to invite you to check out our latest collection and services! We're here to help with all your eyewear needs.\n\nWe value you as a customer and hope to see you soon!\n\nBest Regards,\nThe ${YOUR_SHOP_NAME} Team`;
+          }
+          
+          const encodedMessage = encodeURIComponent(message);
+          
+          // Basic number cleanup: remove spaces, '+', etc.
+          // Assumes numbers include country code (e.g., 91 for India).
+          const cleanContactNo = customer.contactNo?.replace(/[\s+()-]/g, ''); 
+          const whatsappUrl = `https://wa.me/${cleanContactNo}?text=${encodedMessage}`;
+          // --- WHATSAPP LOGIC END ---
+
+          return (
+            <div 
+              key={index} 
+              className={`bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border 
+                ${customer.isRepeat ? 'border-green-400' : 'border-gray-200'}
+                ${customer.monthsSinceLastPurchase > 6 ? 'bg-orange-50' : 
+                  customer.monthsSinceLastPurchase > 3 ? 'bg-yellow-50' : 'bg-white'}
+              `}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-gray-800 flex items-center">
+                  {customer.name || 'N/A'}
+                  {customer.isRepeat && (
+                    <span className="ml-2 px-2 py-0.5 bg-green-200 text-green-800 text-xs font-semibold rounded-full flex items-center">
+                      <FaRedo className="mr-1" /> Repeat
+                    </span>
+                  )}
+                </h3>
+                
+                {/* --- MODIFIED WHATSAPP LINK --- */}
+                {customer.contactNo ? (
+                  <a 
+                    href={whatsappUrl} // Use the new variable with the message
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-green-500 hover:text-green-700 transition-colors"
+                    title={`Message ${customer.name} on WhatsApp`}
+                  >
+                    <FaWhatsapp className="text-2xl" />
+                  </a>
+                ) : (
+                  // Show a disabled-looking icon if no number
+                  <span className="text-gray-400" title="No contact number">
+                    <FaWhatsapp className="text-2xl" />
                   </span>
                 )}
-              </h3>
-              <a 
-                href={`https://wa.me/${customer.contactNo}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-green-500 hover:text-green-700 transition-colors"
-                title={`Message ${customer.name} on WhatsApp`}
-              >
-                <FaWhatsapp className="text-2xl" />
-              </a>
-            </div>
-            
-            <div className="space-y-2 text-sm text-gray-700">
-              <p>
-                <span className="font-semibold">Contact:</span> {customer.contactNo || 'N/A'}
-              </p>
-              <p>
-                <span className="font-semibold">Address:</span> {customer.address || 'N/A'}
-              </p>
-              <p>
-                <span className="font-semibold">Last Purchase:</span> {customer.lastPurchaseDateFormatted}
-              </p>
-              <p className="flex items-center">
-                <span className="font-semibold">Time Since Last Purchase:</span> 
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold
-                  ${customer.monthsSinceLastPurchase <= 3 ? 'bg-blue-100 text-blue-800' :
-                    customer.monthsSinceLastPurchase <= 6 ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'}`
-                }>
-                  {customer.monthsSinceLastPurchase === Infinity ? 'No Record' :
-                   `${customer.monthsSinceLastPurchase} months ago`}
-                </span>
-              </p>
-              {customer.purchaseHistory && customer.purchaseHistory.length > 0 && (
-                <div>
-                  <p className="font-semibold mt-3 mb-1">Last Transaction Details:</p>
-                  <ul className="list-disc list-inside text-xs text-gray-600">
-                    <li>Bill No: {customer.purchaseHistory[customer.purchaseHistory.length - 1]?.billNo || 'N/A'}</li>
-                    <li>Total: {customer.purchaseHistory[customer.purchaseHistory.length - 1]?.total || 0} Rs.</li>
-                    <li>Date: {moment(customer.purchaseHistory[customer.purchaseHistory.length - 1]?.date).format('YYYY-MM-DD') || 'N/A'}</li>
+                {/* --- END MODIFIED WHATSAPP LINK --- */}
+
+              </div>
+              
+              <div className="space-y-2 text-sm text-gray-700">
+                <p>
+                  <span className="font-semibold">Contact:</span> {customer.contactNo || 'N/A'}
+                </p>
+                <p>
+                  <span className="font-semibold">Address:</span> {customer.address || 'N/A'}
+                </p>
+                <p>
+                  <span className="font-semibold">Last Purchase:</span> {customer.lastPurchaseDateFormatted}
+                </p>
+                <p className="flex items-center">
+                  <span className="font-semibold">Time Since Last Purchase:</span> 
+                  <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold
+                    ${customer.monthsSinceLastPurchase <= 3 ? 'bg-blue-100 text-blue-800' :
+                      customer.monthsSinceLastPurchase <= 6 ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'}`
+                  }>
+                    {customer.monthsSinceLastPurchase === Infinity ? 'No Record' :
+                      `${customer.monthsSinceLastPurchase} months ago`}
+                  </span>
+                </p>
+                {customer.purchaseHistory && customer.purchaseHistory.length > 0 && (
+                  <div>
+                    <p className="font-semibold mt-3 mb-1">Last Transaction Details:</p>
+                    <ul className="list-disc list-inside text-xs text-gray-600">
+                      <li>Bill No: {customer.purchaseHistory[customer.purchaseHistory.length - 1]?.billNo || 'N/A'}</li>
+                      <li>Total: {customer.purchaseHistory[customer.purchaseHistory.length - 1]?.total || 0} Rs.</li>
+                      <li>Date: {moment(customer.purchaseHistory[customer.purchaseHistory.length - 1]?.date).format('YYYY-MM-DD') || 'N/A'}</li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+              {customer.isRepeat && customer.purchaseHistory.length > 1 && (
+                <div className="mt-4 p-3 bg-gray-100 rounded-md text-xs">
+                  <p className="font-semibold text-gray-800">Purchase History Summary:</p>
+                  <ul className="list-disc list-inside">
+                    {customer.purchaseHistory.map((sale, saleIdx) => (
+                      <li key={saleIdx}>
+                        {moment(sale.date).format('YYYY-MM-DD')} - Bill: {sale.billNo}, Total: {sale.total} Rs.
+                      </li>
+                    ))}
                   </ul>
                 </div>
               )}
             </div>
-            {customer.isRepeat && customer.purchaseHistory.length > 1 && (
-              <div className="mt-4 p-3 bg-gray-100 rounded-md text-xs">
-                <p className="font-semibold text-gray-800">Purchase History Summary:</p>
-                <ul className="list-disc list-inside">
-                  {customer.purchaseHistory.map((sale, saleIdx) => (
-                    <li key={saleIdx}>
-                      {moment(sale.date).format('YYYY-MM-DD')} - Bill: {sale.billNo}, Total: {sale.total} Rs.
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
 };
 
 export default NotificationForOldCustomer;
-
-// notification of this file now not work becose the commit are not deployed succesfyll
