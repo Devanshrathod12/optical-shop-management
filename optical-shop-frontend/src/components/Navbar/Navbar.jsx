@@ -229,7 +229,7 @@ const Navbar = () => {
           <span className="text-xs">Customers</span>
         </NavLink>
         <NavLink
-          to="/NotificationForOldCustomer"
+          to="/notification"
           className={({ isActive }) => `flex flex-col items-center text-gray-600 ${ isActive ? "text-red-600" : "hover:text-red-600" }` }
         >
           <FaUsers className="text-xl" />
