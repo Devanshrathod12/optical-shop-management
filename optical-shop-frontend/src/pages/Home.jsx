@@ -10,10 +10,11 @@ const Home = () => {
   const [monthsale, setMonthsale] = useState({});
   const [totalStockValue, setTotalStockValue] = useState(0); // New state for total stock value
 
-  const TotalFrameQuantity = stocks?.wholesalers?.reduce(
-    (total, wholesaler) => total + (wholesaler.quantity || 0),
-    0
-  ) || 0;
+  const TotalFrameQuantity =
+    stocks?.wholesalers?.reduce(
+      (total, wholesaler) => total + (wholesaler.quantity || 0),
+      0
+    ) || 0;
 
   const fetchMonthlySale = async () => {
     try {
@@ -89,6 +90,15 @@ const Home = () => {
     expenseColor = "bg-orange-100 border-orange-500"; // Orange if sales cover at least 70% of expenses
   }
 
+  // --- NEW CALCULATION ---
+  // Calculate total number of months that have sales data
+  const numberOfMonthsWithSales = Object.keys(monthsale).length;
+  // Calculate total fixed expenses incurred over all months
+  const totalFixedExpensesIncurred = numberOfMonthsWithSales * fixedExpenses;
+  // Calculate the final net profit after all expenses
+  const totalNetProfit = overallTotalProfit - totalFixedExpensesIncurred;
+  // --- END NEW CALCULATION ---
+
   useEffect(() => {
     const fetchTotalCustomers = async () => {
       try {
@@ -103,7 +113,10 @@ const Home = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/sales/monthly`
         );
         const salesData = salesResponse.data.sales || {};
-        const allSales = Object.values(salesData).flat().filter((sale) => sale) || [];
+        const allSales =
+          Object.values(salesData)
+            .flat()
+            .filter((sale) => sale) || [];
 
         const combinedData = [
           ...customers.map((c) => ({
@@ -136,14 +149,20 @@ const Home = () => {
     };
 
     fetchTotalCustomers();
-  }, []);
+  }, []); // Note: This useEffect doesn't depend on 'monthsale' for customers
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 flex flex-col items-center justify-start px-4 sm:px-6 md:px-10 py-12">
       <div className="w-full max-w-6xl mx-auto text-center mb-12">
-        <img src={logo} alt="Shree Vinayak Optical Admin" className="w-32 mx-auto mt-5 opacity-90" />
+        <img
+          src={logo}
+          alt="Shree Vinayak Optical Admin"
+          className="w-32 mx-auto mt-5 opacity-90"
+        />
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-          <span className="border-b-4 border-blue-600 pb-2">Shree Vinayak Optical</span>
+          <span className="border-b-4 border-blue-600 pb-2">
+            Shree Vinayak Optical
+          </span>
         </h1>
         <p className="mt-4 text-lg text-gray-600 font-medium">
           Inventory & Business Management System
@@ -172,13 +191,24 @@ const Home = () => {
           },
           {
             title: "Overall Shop Profit",
-            desc: "Net earnings from all sales",
+            desc: "Total profit - Frame,Lens,Boxcloth,Fitting", // Description updated for clarity
             count: `₹${overallTotalProfit.toLocaleString("en-IN")}`,
             color:
               overallTotalProfit >= 0
                 ? "bg-emerald-100 border-emerald-500"
                 : "bg-red-100 border-red-500",
           },
+          // --- NEW CARD ADDED ---
+          {
+            title: "Total Net Profit",
+            desc: `Overall profit after fixed expenses (${numberOfMonthsWithSales} months)`,
+            count: `₹${totalNetProfit.toLocaleString("en-IN")}`,
+            color:
+              totalNetProfit >= 0
+                ? "bg-teal-100 border-teal-500"
+                : "bg-red-200 border-red-600",
+          },
+          // --- END OF NEW CARD ---
           {
             title: "Customer Database",
             desc: "Total unique customers",
@@ -210,7 +240,9 @@ const Home = () => {
       </div>
 
       <div className="mt-12 w-full max-w-6xl mx-auto">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+          Quick Actions
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { label: "Add New Product", icon: "＋" },
